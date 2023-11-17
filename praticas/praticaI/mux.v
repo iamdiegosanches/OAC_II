@@ -1,46 +1,32 @@
-module mux (
-    input [3:0] a,
-    input [3:0] b,
-    input s,
-    output reg [3:0] x);
-
-    always @(a, b, s)
-    begin
-        if (s)
-            x = b;
+module mux2 (input [3:0] A, input [3:0] B, input S, output reg [3:0] X);
+    always @(A or B or S) begin
+        if (S == 0)
+            X = A;
         else
-            x = a;
+            X = B;
     end
-
 endmodule
 
-module tb_;
+module teste;
+    reg [3:0] A;
+    reg [3:0] B;
+    reg S;
+    wire [3:0] X;
+    integer i;
 
-    reg [3:0] a;
-    reg [3:0] b;
-    reg s;
-
-    wire [3:0] x;
-
-    mux uut (
-        .a(a),
-        .b(b),
-        .s(s),
-        .x(x)
-    );
+    mux2 m1 (.A(A), .B(B), .S(S), .X(X));
 
     initial begin
-        a = 4'b1010;
-        b = 4'b1100;
-        s = 0;
+        A = 4'b1010;
+        B = 4'b0010;
+        S = 0;
 
-        $monitor("At time %t, A = %b, B = %b, s = %b, x = %b", $time, a, b, s, x);
+        $monitor (" A=%b B=%b S=%b X=%b", A, B, S, X);
 
-        s = 1;
+        S = 1;
         #5;
-        s = 0;
+        S = 0;
         #5;
 
     end
-
 endmodule
